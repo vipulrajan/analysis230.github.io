@@ -1,0 +1,206 @@
+:root {
+  --primary-color: #000000;
+  --secondary-color: #ffffff;
+  --done-color: #ffffff;
+}
+
+.button {
+  border-radius: 10px;
+  width: 130px;
+  margin-right: 5px;
+  background-color: rgb(70, 70, 70);
+  border: none;
+  color: white;
+}
+
+.button span {
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: "\00bb";
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+.button:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}
+.button:active {
+  transform: scale(0.95);
+}
+.button:hover span {
+  padding-right: 25px;
+}
+.button:disabled {
+  opacity: 0.2;
+  cursor: default;
+}
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+.background {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  z-index: -1;
+  background-color: var(--primary-color);
+}
+.topMenu {
+  flex-direction: row;
+  display: flex;
+  position: absolute;
+  z-index: 3;
+  left: 20px;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  justify-content: flex-start;
+  background-color: black;
+  height: 35px;
+  margin-top: 2.5px;
+  margin-bottom: 2.5px;
+}
+.foreground {
+  flex-direction: row;
+  display: flex;
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 40px;
+  justify-content: flex-start;
+}
+.leftContent {
+  flex-direction: column;
+  display: flex;
+  width: 50%;
+  position: relative;
+  justify-content: flex-end;
+}
+
+.parent {
+  width: 100%;
+  height: 50%;
+  position: relative;
+  border: 2px solid rgb(255, 255, 255);
+}
+.icon {
+  position: relative;
+  width: 50px;
+  height: 100%;
+  background-color: rgb(70, 70, 70);
+  border-radius: 10px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  color: white;
+}
+.menuCard {
+  padding: 15px;
+  border-radius: 10px;
+  margin: 10px;
+  background-color: rgb(172, 172, 172);
+  display: none;
+  max-height: 70%;
+  overflow-y: scroll;
+  flex-direction: column;
+}
+.menuEntry {
+  padding: 10px;
+  width: unset;
+  margin-right: unset;
+  margin-bottom: 5px;
+}
+.settingsMenuTab {
+  padding: 10px;
+  background-color: rgb(37, 37, 37);
+  border-radius: 10px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  cursor: pointer;
+}
+.settingsMenuTab span {
+  cursor: pointer;
+}
+.settingsMenuPage {
+  padding: 20px;
+  background-color: rgb(37, 37, 37);
+  border-radius: 10px;
+  width: 400px;
+  height: 600px;
+  overflow-y: scroll;
+  border-top-left-radius: 0;
+}
+
+.disabledMenuButton {
+  background-color: rgb(65, 65, 65);
+}
+.subField {
+  margin-left: 40px;
+}
+.subFieldDisabled {
+  opacity: 0.6;
+}
+span {
+  font-family: Helvetica;
+}
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  margin-bottom: 20px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+input:disabled {
+  opacity: 0.6;
+}
+
+#editor {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+#editor2 {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+#blurLayer {
+  display: none;
+  flex-direction: row;
+  align-items: flex-start;
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  backdrop-filter: blur(5px);
+}
+input[type="range"][orient="vertical"] {
+  writing-mode: bt-lr; /* IE */
+  -webkit-appearance: slider-vertical; /* WebKit */
+  width: 10px;
+  height: 100%;
+  padding: 0 5px;
+}

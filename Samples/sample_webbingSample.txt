@@ -1,0 +1,13 @@
+customGCode(`G1 E0.7`)
+customGCode(`M106 `)
+lineEquation(40*Math.cosDegrees(tVal) + 125, 40*Math.sinDegrees(tVal) + 125, 0, 0, 360, 5, 0.4, 0.2)
+lineEquation(35*Math.cosDegrees(tVal) + 125, 35*Math.sinDegrees(tVal) + 125, 0, 0, 360, 5, 0.4, 0.2)
+repeatPolar('4', 125, 125, 0, 0, 0.2, 9)
+
+lineCartesian(R0, R0, R0, R0, R0, R0.2, Tr, 0, 0)
+lineEquation(35*Math.cosDegrees(tVal) + 125, 35*Math.sinDegrees(tVal) + 125, R0, 180, 0, -1, 0.4, 0.2)
+customGCode(`G1 E0.1`)
+lineCartesian(R0, R0, R0, R-70, R0, R0.1, Pr, 0.4, 0.2, [M=0.7, F=3000])
+lineCartesian(R0, R0, R0, R0, R0, R-0.1, Pr, 0.4, 0.2, [M=0.7, F=3000])
+lineEquation(35*Math.cosDegrees(tVal) + 125, 35*Math.sinDegrees(tVal) + 125, R0, 180, 360, 1, 0.4, 0.2)
+repeatPolar('8-12', 125, 125, 10, 0, 0.2, 2)

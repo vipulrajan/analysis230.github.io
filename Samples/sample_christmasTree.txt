@@ -1,0 +1,29 @@
+lineEquation(12*Math.cosDegrees(tVal) + 125, 12*Math.sinDegrees(tVal) + 125, 0, 0, 360, 1, 0.4, 0.2, [F=700, M=0.7])
+repeatPolar('1', 125, 125, 0, -0.4, 0, 4)
+lineEquation(10*Math.cosDegrees(tVal) + 125, 10*Math.sinDegrees(tVal) + 125, 0, 0, 360, 5, 0.4, 0.2)
+repeatPolar('3', 125, 125, 0, -0.4, 0, 15)
+customGCode(`M106 `)
+repeatPolar('3', 125, 125, 0, 0, 0.2, 19)
+lineCartesian(R0, R0, R0, R0, R0, R0.2, Tr, 0, 0)
+customGCode(`M104 S185`)
+lineEquation( 10*Math.cosDegrees(tVal) + 125, 10*Math.sinDegrees(tVal) + 125, zVal, 15, 375, 0.5, 0.4, 0.2, [M=1.2,F=300])
+lineCartesian(R0, R0, R0, R0, R0, R0.2, Tr, 0, 0)
+lineEquation(10*Math.cosDegrees(tVal) + 125, 10*Math.sinDegrees(tVal) + 125, zVal, 0, 360, 10, 0.4, 0.2)
+repeatPolar('11', 125, 125, 0, -0.02, 0.2, 9)
+lineCartesian(R0, R0, R0, R0, R0, R0.2, Tr, 0, 0)
+lineEquation((9.8 + Math.min(Math.max(0,15*Math.sinDegrees(`freq`*tVal - 90 )), 12))*Math.cosDegrees(tVal) + 125, (9.8 + Math.min(Math.max(0,15*Math.sinDegrees(`freq`*tVal - 90 )), 12))*Math.sinDegrees(tVal) + 125, zVal, 0, 360, 1, 0.4, 0.2, [M=1.8,F=200])
+lineEquation(if ( Math.sinDegrees(`freq`*tVal - 90 ) > 0.1) 9.8*Math.cosDegrees(tVal) + 125;, if ( Math.sinDegrees(`freq`*tVal - 90 ) > 0.1) 9.8*Math.sinDegrees(tVal) + 125;, zVal, 15, 375, 1, 0.4, 0.2, [M=if(Math.sinDegrees(`freq` * tVal - 90) > 0.1) 1.4; else 0;,F=300])
+
+customGCode(`M600 `)
+repeatPolar('12-15', 125, 125, 15, -0.2, 2, 10)
+
+customGCode(`M600 `)
+repeatPolar('18', 125, 125, -15, -2, 20, 1)
+
+customGCode(`M600 `)
+repeatPolar('21', 125, 125, -25, -2, 20, 1)
+
+customGCode(`M600 `)
+repeatPolar('24', 125, 125, 45, -2, 20, 1)
+
+

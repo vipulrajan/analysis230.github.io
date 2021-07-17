@@ -1,0 +1,5 @@
+lineCartesian(55, 55, 0, R50, R0, R0, Pr, 0.4, 0.2)
+lineCartesian(R0, R0, R0, R0, R50, 0, Pr, 0.4, 0.2)
+lineCartesian(R0, R0, R0, R-50, R0, R0, Pr, 0.4, 0.2)
+lineCartesian(R0, R0, R0, R0, R-50, 0, Pr, 0.4, 0.2)
+repeatPolar('1-4', 80, 80, 0.1, 0, 0.2, 300)

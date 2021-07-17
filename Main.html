@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Gcode Designer</title>
+    <link href="stylesheet.css" rel="stylesheet">
+    <script src="Main.js"> </script>
+    <script src="./scripts/cachingManagement.js"></script>
+    <style type="text/css" media="screen">
+     
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r119/three.min.js"></script>
+    
+</head>
+
+<body>
+    <div class="topMenu">
+        <button class="button" id="addFeatureMenuButton"><span>Add Feature</span></button>
+        <button class="button" id="settingsMenuButton"><span>Settings</span></button>
+        <button class="button" id="parametersMenuButton"><span>Parameters</span></button>
+        <button class="button" id="exportMenuButton"><span>Export</span></button>
+        <button class="button" id="loadDesignMenuButton"><span>Load Design</span></button>
+    </div>
+    <div class="foreground">
+        
+        <div id="blurLayer">
+            <script src="./parsers/parser.js"></script>
+            <script src="./parsers/intermediateParser.js"></script>
+            <script src="./scripts/addFeature.js"></script>
+            <script src="./scripts/gcodeGenerator.js"></script>
+            <div id="parametersMenuCard" class="menuCard" >
+                <div id="definedParamters" style="display: flex; flex-direction: column;"> </div>
+                <div id="newParameter" style="display: flex; flex-direction: row;"> 
+                    <input type="text" style="margin: 0;" id="parameterName" >
+                    <input type="text" style="margin: 0;" id="parameterValue">
+                    <button id="addParameter" class="button" style="width:unset; margin: 0px; border-radius: 2px;"  >
+                        <i class="fa fa-plus" style="font-size: 20px;"></i>
+                    </button>
+                </div>
+                <script src="./scripts/parameters.js"></script>
+                <button onclick="resetParameters()" title="Reset Parameters" class="button" style="padding: 10px; margin-top: 10px;"><span>Reset</span></button>
+            </div>
+            <div id="addFeatureMenuCard" class="menuCard">
+                <button class="button menuEntry" onclick="addFeature('lineCartesian')">Line (Cartesian)</button>
+                <button class="button menuEntry" onclick="addFeature('linePolar')">Line (Polar)</button>
+                <button class="button menuEntry" onclick="addFeature('lineEquation')">Line Equation</button>
+                <button class="button menuEntry" disabled="true">Line Equation (Polar)</button>
+                <button class="button menuEntry" onclick="addFeature('arc')">Arc/Circle</button>
+                <button class="button menuEntry" disabled="true">Rectangle</button>
+                <button class="button menuEntry" disabled="true">Polygon</button>
+                <Span>--------</Span>
+                <button class="button menuEntry" onclick="addFeature('repeatCartesian')">Cartesian Repeat</button>
+                <button class="button menuEntry"  onclick="addFeature('repeatPolar')">Polar Repeat</button>
+                <button class="button menuEntry" disabled="true">Reflect (XY)</button>
+                <button class="button menuEntry" disabled="true">Reflect (Polar)</button>
+                <button class="button menuEntry" disabled="true">Reflect (Z))</button>
+                <button class="button menuEntry" disabled="true">Concentric Repeat (Rectangle Only)</button>
+                <button class="button menuEntry" disabled="true">Reproduce and Recalculate</button>
+                <Span>--------</Span>
+                <button class="button menuEntry" disabled="true">Retraction</button>
+                <button class="button menuEntry" onclick="addFeature('customGCode')">Custom Gcode</button>
+                <Span>--------</Span>
+                <button class="button menuEntry" disabled="true">Repeat Rule</button>
+                <button class="button menuEntry" disabled="true">Postprocess</button>
+            </div>
+            <div id="settingsMenuCard" class="menuCard" >
+                
+                <div style="display: flex; flex-direction: row; align-items: flex-start;">
+                    <div class="settingsMenuTab " onclick="activatePage(this, 'printerSettings')"><span>Printer</span></div>
+                    <div class="settingsMenuTab disabledMenuButton" onclick="activatePage(this, 'retractionSettings')"><span>Auto Retraction</span></div>
+                    <div class="settingsMenuTab disabledMenuButton" onclick="activatePage(this, 'temperatureSettings')"><span>Temps And Speeds</span></div>
+
+                </div>
+                <div id="printerSettings" class="settingsMenuPage"  >
+                    <span class="inputLabel" >Z offset (mm)</span>
+                    <input type="number" id="zOffset"  placeholder="0.2">
+
+                    <span class="inputLabel" >Extrusion Multiplier</span>
+                    <input type="number" id="flem" placeholder="1">
+
+
+                    <span class="inputLabel" >Printer Model</span>
+                    <select id="printerType" placeholder="PrusaMk3s" >
+                        <option value="PrusaMk3s">Prusa Mk3s</option>
+                        <option value="Ultimaker2">Ultimaker 2</option>
+                        <option value="PrusaMini">Prusa Mini</option>
+                      </select>
+
+                    <span class="inputLabel" >Fan Speed (%age)</span>
+                    <input type="number" id="fanSpeed" placeholder="0">
+
+
+                </div>
+                <div id="retractionSettings" class="settingsMenuPage" style="display: none;">
+                    <span class="inputLabel" >Auto Travel Retraction</span>
+                    <select id="autoRetract" >
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                      </select>
+                    
+
+
+                    <span class="inputLabel subField subFieldDisabled" >Threshhold Distance (mm)</span>
+                    <div style="justify-content: center; display: flex;">
+                        <input style="width: 80%;" type="number" id="threshHoldDistance" disabled placeholder="5">
+                    </div>
+
+                    <span class="inputLabel subField subFieldDisabled" >Retracion (E Value)</span>
+                    <div style="justify-content: center; display: flex;">
+                        <input style="width: 80%;" type="number" id="retraction" disabled placeholder="0.7">
+                    </div>
+
+                    <span class="inputLabel subField subFieldDisabled" >Retracion Speed (F Value - mm/min)</span>
+                    <div style="justify-content: center; display: flex;">
+                        <input style="width: 80%;" type="number" id="retractionSpeed" disabled placeholder="2500">
+                    </div>
+
+                    <span class="inputLabel subField subFieldDisabled" >UnRetraction (EValue)</span>
+                    <div style="justify-content: center; display: flex;">
+                        <input style="width: 80%;" type="number" id="unretraction" disabled placeholder="0.7">
+                    </div>
+
+
+                    <span class="inputLabel subField subFieldDisabled" >UnRetracion Speed (F Value - mm/min)</span>
+                    <div style="justify-content: center; display: flex;">
+                        <input style="width: 80%;" type="number" id="unretractionSpeed" disabled placeholder="2500">
+                    </div>
+
+                    <span class="inputLabel subField subFieldDisabled" >Z-hop (mm)</span>
+                    <div style="justify-content: center; display: flex;">
+                        <input style="width: 80%;" type="number" id="zHop" disabled placeholder="0.2">
+                    </div>
+
+                    <span class="inputLabel subField subFieldDisabled" >Z-hop Speed (F Value - mm/min)</span>
+                    <div style="justify-content: center; display: flex;">
+                        <input style="width: 80%;" type="number" id="zHopSpeed" disabled placeholder="7500">
+                    </div>
+                </div>
+                <div id="temperatureSettings" class="settingsMenuPage" style="display: none;">
+                    <span class="inputLabel" >Bed Temp (°C)</span>
+                    <input type="number" id="bedTemp" placeholder="60">
+
+                    <span class="inputLabel" >Nozzle Temp (°C)</span>
+                    <input type="number" id="nozzleTemp" placeholder="210">
+
+                    <span class="inputLabel" >Travel Speed (F Value - mm/min)</span>
+                    <input type="number" id="travelSpeed" placeholder="9000">
+
+                    <span class="inputLabel" >Print Speed (F Value - mm/min)</span>
+                    <input type="number" id="printSpeed" placeholder="1000">
+                </div>
+                <script src="./scripts/settings.js"></script>
+                <button onclick="resetSetting()" title="Reset Settings" class="button" style="padding: 10px; margin-top: 10px;"><span>Reset</span></button>
+            </div>
+        </div>
+        <script src="./menuBar.js"></script>
+        <div class="leftContent">
+            <div class="parent" style="border-top: hidden; border-left: hidden; border-right: hidden;">
+                <div id="editor"></div>
+                <script src="ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+                <script>
+                    var editor = ace.edit("editor");
+                    editor.resize();
+                    editor.setTheme("ace/theme/monokai");
+                    editor.session.setMode("ace/mode/text");
+                    
+                    function loadCodeFromCache(){
+                        const cachedCode = localStorage.getItem("code");
+
+                        if (cachedCode != null)
+                            editor.setValue(cachedCode,1);
+                    }
+
+                    loadCodeFromCache();
+                    
+                </script>
+            </div>
+
+            
+            <div class="parent" style="border-bottom: hidden; border-left: hidden; border-right: hidden;">
+                <div id="editor2"></div>
+
+                <script src="ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+                <script>
+                    var editor2 = ace.edit("editor2");
+                    editor2.resize();
+                    editor2.setTheme("ace/theme/monokai");
+                    editor2.session.setMode("ace/mode/gcode");
+                    //editor.setReadOnly(true);
+
+                </script>
+            </div>
+
+        </div>
+        <div id="gcodeViewerContainer" style="position:relative; width:50%;height:100%; display: flex; flex-direction: row;">
+            <script type="module"  src="./gcodeViewerUpdated.js"></script>
+            
+            <div style="margin:5px; width: 105px; height: 50px; position: absolute; z-index: 2; flex-direction: row; display: flex;">
+                <div class="icon" style="margin-right: 5px;">
+                    <button id="loadGcode" class="button" style="width:inherit; margin: 0px;" title="Reload Gcode"  >
+                        <i class="fa fa-refresh" style="font-size: 30px;"></i>
+                    </button>
+                </div>
+                <div class="icon">
+                    <button id="resetCamera" class="button" style="width:inherit; margin: 0px;" title="Reset Camera" >
+                        <i class="fa fa-repeat" style="font-size: 30px;"></i>
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+        <div style="position: relative; width: 10px; height: 100%; display: flex; justify-content: flex-end; align-items: center;">
+            <input id="gcodeSlider"  type="range" min="0" max="1" value="1" step="3" orient="vertical" style="position: relative;"/>
+        </div>
+    </div>
+    <div class="background"> </div>
+</body>
+
+</html>
