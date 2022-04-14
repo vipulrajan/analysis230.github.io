@@ -1,51 +1,85 @@
-let definedParameters = {};
+let definedParameters = {}; // public
+let parameterObjects = []; // internal bookkeeping (private to file)
 
-const definedParametersDiv = document.getElementById("definedParamters");
+const definedParametersDiv = document.getElementById("definedParameters");
 
-document.getElementById("addParameter").addEventListener('click', () => addParameter(document.getElementById("parameterName"), document.getElementById("parameterValue")));
+document.getElementById("addParameter").addEventListener("click", () => {
+  const nameElem = document.getElementById("parameterName");
+  const valueElem = document.getElementById("parameterValue");
+  addParameter(nameElem.value, valueElem.value);
+  nameElem.value = "";
+  valueElem.value = "";
+});
 
-function addParameter(paraNameInput, paraValueInput) {
+const updateParamObject = (index, type) => (element) => {
+  const elementIdx = parameterObjects.findIndex((e) => e.index === index);
 
-    const paraName = paraNameInput.value;
-    const paraValue = paraValueInput.value;
-    if (paraName != "" && paraValue != "") {
-        definedParameters[paraName] = paraValue;
-        saveParameterseToCache();
-        updateDefinedParameters();
-    }
+  if (type === 'key') {
+    parameterObjects[elementIdx].key = element.target.value;
+  } else if (type === 'value') {
+    parameterObjects[elementIdx].val = element.target.value;
+  }
 
-    paraNameInput.value = "";
-    paraValueInput.value = "";
+  updateDefinedParameters();
+  saveParametersToCache();
+};
+
+function addParameter(paraName, paraValue) {
+  const uniqueIndex = Math.random();
+  if (paraName != "" && paraValue != "") {
+    parameterObjects.push({ key: paraName, val: paraValue, index: uniqueIndex});
+    updateDefinedParameters();
+    saveParametersToCache();
+  }
+
+  const newParameterElem = document.createElement("span");
+  const newParameterElemKey = document.createElement("input");
+  const newParameterElemValue = document.createElement("input");
+
+  newParameterElemKey.value = paraName;
+  newParameterElemKey.oninput = updateParamObject(uniqueIndex, 'key');
+  newParameterElemValue.value = paraValue;
+  newParameterElemValue.oninput = updateParamObject(uniqueIndex, 'value');
+
+  newParameterElem.appendChild(newParameterElemKey);
+  newParameterElem.appendChild(newParameterElemValue);
+
+  definedParametersDiv.appendChild(newParameterElem);
 }
 
+// derive definedParameters from parameterObjects
 function updateDefinedParameters() {
+  definedParameters = {};
 
-    const keys = Object.keys(definedParameters);
-
-    definedParametersDiv.innerHTML = "";
-    keys.forEach((key) => {
-        definedParametersDiv.innerHTML = definedParametersDiv.innerHTML + `<span style='margin-bottom:10px; margin-left:5px'>${key}:${definedParameters[key]}<span>`;
-    });
-
+  parameterObjects.forEach((element) => {
+    definedParameters[element.key] = element.val;
+  });
 }
 
 function loadParameterFromCache() {
-    const cachedParameters = localStorage.getItem("parameters");
+  const cachedParameters = localStorage.getItem("parameters");
+  let parsedParameters = {}
 
-    if (cachedParameters != null)
-        definedParameters = JSON.parse(cachedParameters);
+  if (cachedParameters != null) 
+    parsedParameters = JSON.parse(cachedParameters);
+
+  const keys = Object.keys(parsedParameters);
+  for (const key of keys) {
+    addParameter(key, parsedParameters[key]);
+  }
 }
 
-function saveParameterseToCache() {
-    localStorage.setItem("parameters", JSON.stringify(definedParameters));
+function saveParametersToCache() {
+  localStorage.setItem("parameters", JSON.stringify(definedParameters));
 }
 
 function resetParameters() {
-    definedParameters = {};
-    saveParameterseToCache();
-    updateDefinedParameters();
+  parameterObjects = [];
+  definedParameters = {};
+  definedParametersDiv.innerHTML = "";
+  saveParametersToCache();
 }
 
 loadParameterFromCache();
-saveParameterseToCache();
 updateDefinedParameters();
+saveParametersToCache();
